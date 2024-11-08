@@ -8,6 +8,7 @@ function App() {
   return (
     <div className="App">
       <h1>지역 날씨 정보</h1>
+      <Home/>
       <Routes>
         <Route path='/' element={<Home/>}/>
         <Route path='/weather/:region/:city' element={<WeatherPage/>}/>
