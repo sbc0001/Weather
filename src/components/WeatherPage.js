@@ -49,7 +49,7 @@ function WeatherPage(){
 
 useEffect(()=>{
     const fetchWeather = async () =>{
-    const apiKey = '76884e5e22c3fc52ebb0258eff92d74b';
+    const apiKey = process.env.REACT_APP_WEATHER_API_KEY;
     const mappedCity=cityMapping[city] || city;
     try{
         const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather`, {
