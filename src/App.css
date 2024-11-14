@@ -1,5 +1,5 @@
 body{
-  background-color:#ccc;
+  background-color:#fefefe;
 }
 .App {
   text-align: center;
@@ -7,15 +7,20 @@ body{
 .App>div{
   margin:0 auto;
   width:920px;
+  height:auto;
   display:flex;
-  flex-flow:row wrap;
   justify-content:space-between;
   align-items:center;
-  gap:10px;
+  padding:5px 20px;
 }
 img{
   width:50px;
   height:auto;
+}
+select{
+  padding:5px 10px;
+  border:2px solid #333;
+  font-size:0.852rem;
 }
 h1{
   font-size:1.4rem;
