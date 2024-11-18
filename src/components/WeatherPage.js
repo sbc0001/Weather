@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import {useParams, useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
 
-const Button=styled.button`padding:5px 10px; font-size:14px; cursor:pointer; background-color:#ccc; border:none; border-radius:7px; &hover{background-color:#e69;}`;
 const Container = styled.div`
 text-align:center;
-width:300px;
-height:330px;
+width:290px;
+height:290px;
 box-sizing:border-box;
 padding:5px;
-background-color:#000;
-color:#fff;
+background-color:#ccc;
+color:#333;
+border-radius:20px;
+box-shadow:5px 4px 3px rgba(0,0,0,0.3), 5px 4px 3px rgba(255,255,255,1) inset;
+transition:all .4s ease;
+font-weight:bold;
 `;
 const LoadingSpinner = styled.div`
 border:4px solid #eee;
@@ -66,32 +68,33 @@ const cityMapping={
     '제주':'Jeju',
 }
 
-function WeatherPage(){
-    const navigate=useNavigate();
-    const {region, city}=useParams();
+function WeatherPage({ region, city }){
     const [weatherData, setWeatherData] = useState(null);
     const [error, setError] = useState(null);
 
 useEffect(()=>{
     const fetchWeather = async () =>{
-    const apiKey = process.env.REACT_APP_WEATHER_API_KEY;
-    const mappedCity=cityMapping[city] || city;
-    try{
-        const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather`, {
-        params:{
-            q:`${mappedCity},KR`,
-            appid:apiKey,
-            units:'metric',
-            lang:'kr',
+        const apiKey = process.env.REACT_APP_WEATHER_API_KEY;
+        const mappedCity=cityMapping[city] || city;
+        try{
+            const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather`, {
+            params:{
+                q:`${mappedCity},KR`,
+                appid:apiKey,
+                units:'metric',
+                lang:'kr',
+            }
+            });
+            setWeatherData(response.data);
+        }catch (error) {
+            setError("날씨 정보를 불러오는 중 오류가 발생했습니다.")
         }
-        });
-        setWeatherData(response.data);
-    }catch (error) {
-        setError("날씨 정보를 불러오는 중 오류가 발생했습니다.")
-    }
-};
+    };
     fetchWeather();
 }, [city]);
+
+if (error) return <Container><p>{error}</p></Container>;
+if (!weatherData) return <Container><LoadingSpinner /></Container>;
 
 return(
     <Container>
@@ -100,16 +103,15 @@ return(
         ) : weatherData ? (
             <>
                 <h2>{`${region} - ${city} 날씨 정보`}</h2>
-                <p>날씨: {weatherData.weather[0].description}</p>
+                <p>날씨 : {weatherData.weather[0].description}</p>
                 <img src={`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`} alt={weatherData.weather[0].description}/>
-                <p>온도: {weatherData.main.temp}°C</p>
-                <p>체감온도: {weatherData.main.feels_like}°C</p>
-                <p>풍속: {weatherData.wind.speed} m/s</p>
+                <p>온도 : {weatherData.main.temp}°C</p>
+                <p>체감온도 : {weatherData.main.feels_like}°C</p>
+                <p>풍속 : {weatherData.wind.speed} m/s</p>
             </>
         ) : (
             <LoadingSpinner />
         )}
-        <Button onClick={() => navigate(-1)}>뒤로가기</Button>
     </Container>
 );
 }

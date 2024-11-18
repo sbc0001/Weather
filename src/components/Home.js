@@ -1,15 +1,11 @@
 import React, {useState} from 'react';
-import { useNavigate } from 'react-router-dom';
 import CitySelector from './CitySelector';
 import styled from 'styled-components';
+import WeatherPage from './WeatherPage';
 
 const Container = styled.div`
 text-align:center;
-width:300px;
-height:auto;
-box-sizing:border-box;
-padding:5px;
-background-color:#ccc;
+background-color:#ededed;
 color:#333;
 `;
 
@@ -34,12 +30,7 @@ const citiesRegion = {
 
 
 function Home(){
-    const navigate=useNavigate();
     const [selectedRegion, setSelectedRegion]=useState('');
-
-    const handleCityClick=(city)=>{
-        navigate(`/weather/${selectedRegion}/${city}`);
-    }
 
     return (
         <Container>
@@ -52,15 +43,16 @@ function Home(){
 
                 {selectedRegion && (
                 <div>
-                    <h2>{selectedRegion}의 도시 목록</h2>
+                    <div className='h2container'>
+                        <h2>{selectedRegion}의 도시 날씨정보</h2>
+                    </div>
+                    
                     {citiesRegion[selectedRegion].map((city) => (
-                        <div 
-                            key={city} 
-                            style={{ marginBottom: '20px', cursor: 'pointer' }}
-                            onClick={() => handleCityClick(city)}
-                        >
-                            <h3>{city}</h3>
-                        </div>
+                        <WeatherPage 
+                            key={`${selectedRegion}-${city}`}
+                            region={selectedRegion}
+                            city={city}
+                        />
                     ))}
                 </div>
             )}
